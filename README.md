@@ -1,7 +1,7 @@
 # cachesimulator
 Simulador de hierarquia de memória cache utilizando mapeamento, politica de substituição e política de escrita.
 Simulador de Hierarquia de Memória
-1.Descrição
+1. Descrição
 Implementar uma ferramenta que simule o comportamento interno de uma cache L1 e da memória
 principal. O simulador recebe como entrada uma sequencia de comandos que podem ser de leitura ou
 escrita e o endereço solicitado. A cache simulada deve verificar a presença ou não do bloco contendo o
@@ -17,13 +17,13 @@ solicitado.
 O algoritmo de substituição de blocos podem ser de 4: Aleatório, FIFO, LFU e LRU. Dependendo da
 política de substituição escolhida e após receber o comando de leitura ou escrita o simulador deve
 adicionalmente informar se houve substituição e qual bloco foi retirado de que linha da cache.
-2.Comandos
+2. Comandos
 O simulador aceita como entrada 3 comandos: read, write e show. O comando read recebe como parâmetro
 o endereço a ser lido. Como resposta o simulador deve informar o resultado (hit ou miss) e a linha da cache
 que contém o bloco solicitado. O comando write funciona de maneira similar, entretanto além do endereço
 do dado a ser escrito ele tem como parâmetro o novo valor a ser escrito. Por fim, o comando show mostra o
 conteúdo de toda a cache e de toda a memória principal.
-3.Arquivo de Configuração
+3. Arquivo de Configuração
 O simulador precisa gerenciar uma memória cache com características pré-definidas. Em um arquivo de
 configuração (config.txt) devem ficar armazenadas as escolhas do usuário para as seguintes características
 (nesta ordem). No início da simulação este arquivo é lido e suas configurações entram em vigor durante a
