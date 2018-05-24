@@ -1,5 +1,5 @@
 # cachesimulator
-Simulador de Hierarquia de Memória
+## Simulador de Hierarquia de Memória
 1. Descrição
 Implementar uma ferramenta que simule o comportamento interno de uma cache L1 e da memória
 principal. O simulador recebe como entrada uma sequencia de comandos que podem ser de leitura ou
@@ -74,7 +74,7 @@ Write 25 -> HIT linha 2 -> novo valor do endereço 25=41
 
 Show ->
 
-CACHE L1
+###### CACHE L1
 
 Linha –Bloco-Endereço -Conteúdo
 
@@ -110,7 +110,7 @@ Linha –Bloco-Endereço -Conteúdo
 
 3 – 7 – 31 - 1
 
-MEMORIA PRINCIPAL
+###### MEMORIA PRINCIPAL
 
 Bloco-Endereço -Conteúdo
 
@@ -145,3 +145,4 @@ Bloco-Endereço -Conteúdo
 3 – 14– 0
 
 3 – 15 –1
+.......
