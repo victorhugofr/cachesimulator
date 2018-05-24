@@ -1,5 +1,4 @@
 # cachesimulator
-Simulador de hierarquia de memória cache utilizando mapeamento, politica de substituição e política de escrita.
 Simulador de Hierarquia de Memória
 1. Descrição
 Implementar uma ferramenta que simule o comportamento interno de uma cache L1 e da memória
@@ -28,22 +27,39 @@ O simulador precisa gerenciar uma memória cache com características pré-defin
 configuração (config.txt) devem ficar armazenadas as escolhas do usuário para as seguintes características
 (nesta ordem). No início da simulação este arquivo é lido e suas configurações entram em vigor durante a
 execução.
+
 Tamanho do bloco (em número de palavras)
+
 Numero de linhas da cache
+
 Numero de blocos da memória principal
+
 Mapeamento (1 – Direto; 2 – Totalmente Associativo; 3 – Parcialmente Associativo)
+
 Numero de conjuntos (caso não seja Parcialmente Associativo, ler o valor normalmente mas desconsidere-o)
+
 Política de substituição (1 – Aleatório; 2 – FIFO; 3 – LFU; 4 – LRU)4.
+
 Exemplo de arquivo de configuração
+
 Arquivo config.txt: O que significa:
+
 4 - Cada bloco contém 4 palavras
+
 8 - A cache tem 8 linhas (ou seja, comportam até 8 blocos vindos da memória)
+
 16 - A memória principal tem 16 blocos
+
 1 - Mapeamento Direto
+
 2 - Não significa NADA pois o mapeamento não é parcialmente associativo
+
 4 - Política de substituição LRU5.
+
 ## Exemplo de funcionamento:
+
 Entrada: Saída:
+
 Command> Read 25
 
 Command> Read 28
@@ -63,36 +79,69 @@ CACHE L1
 Linha –Bloco-Endereço -Conteúdo
 
 0 – 4– 16 – 23
+
 0 – 4 – 17 - 32
+
 0 – 4 – 18 – 0
+
 0 – 4 – 19 – 12
+
 1 – 1 – 4 - 7
+
 1 – 1 – 5 - 12
+
 1 – 1 – 6 – 12
+
 1 – 1 – 7 - 7
+
 2 – 6 – 24 – 0
+
 2 – 6 – 25 - 41
+
 2 – 6 – 26 - 0
+
 2 – 6 – 27 – 0
+
 3 – 7 – 28 - 3
+
 3 – 7 – 29 - 99
+
 3 – 7 – 30 - 0
+
 3 – 7 – 31 - 1
+
 MEMORIA PRINCIPAL
+
 Bloco-Endereço -Conteúdo
+
 0 – 0 – 7
+
 0 – 1 - 2
+
 0 – 2 – 0
+
 0 – 3 – 0
+
 1 – 4 – 7
+
 1 – 5 – 12
+
 1 – 6 – 12
+
 1 – 7 – 7
+
 2 – 8 – 0
+
 2 – 9 – 0
+
 2 – 10 – 0
+
 2 – 11 – 0
+
 3 – 12 – 0
+
 3 – 13 – 0
+
 3 – 14– 0
+
 3 – 15 –1
