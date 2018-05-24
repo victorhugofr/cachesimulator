@@ -58,13 +58,15 @@ Arquivo config.txt: O que significa:
 
 ## Exemplo de funcionamento:
 
-Entrada: Saída:
+**Entrada:**
 
 Command> Read 25
 
 Command> Read 28
 
 Command>Write 25 41
+
+**Saída:**
 
 Command> Show Read 25 -> HIT linha 2
 
