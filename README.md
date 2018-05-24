@@ -77,7 +77,7 @@ Show ->
 ###### CACHE L1
 
 Linha –Bloco-Endereço -Conteúdo
-
+```
 0 – 4– 16 – 23
 
 0 – 4 – 17 - 32
@@ -109,11 +109,11 @@ Linha –Bloco-Endereço -Conteúdo
 3 – 7 – 30 - 0
 
 3 – 7 – 31 - 1
-
+```
 ###### MEMORIA PRINCIPAL
 
 Bloco-Endereço -Conteúdo
-
+```
 0 – 0 – 7
 
 0 – 1 - 2
@@ -146,3 +146,4 @@ Bloco-Endereço -Conteúdo
 
 3 – 15 –1
 .......
+```
