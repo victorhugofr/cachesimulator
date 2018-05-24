@@ -45,14 +45,23 @@ Arquivo config.txt: O que significa:
 ## Exemplo de funcionamento:
 Entrada: Saída:
 Command> Read 25
+
 Command> Read 28
+
 Command>Write 25 41
+
 Command> Show Read 25 -> HIT linha 2
+
 Read 28 -> MISS -> alocado na linha 3 -> bloco 7 substituido
+
 Write 25 -> HIT linha 2 -> novo valor do endereço 25=41
+
 Show ->
+
 CACHE L1
+
 Linha –Bloco-Endereço -Conteúdo
+
 0 – 4– 16 – 23
 0 – 4 – 17 - 32
 0 – 4 – 18 – 0
