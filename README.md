@@ -66,6 +66,8 @@ Command> Read 28
 
 Command>Write 25 41
 
+Show ->
+
 **Saída:**
 
 Command> Show Read 25 -> HIT linha 2
@@ -73,8 +75,6 @@ Command> Show Read 25 -> HIT linha 2
 Read 28 -> MISS -> alocado na linha 3 -> bloco 7 substituido
 
 Write 25 -> HIT linha 2 -> novo valor do endereço 25=41
-
-Show ->
 
 ###### CACHE L1
 
