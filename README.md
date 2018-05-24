@@ -8,13 +8,13 @@ dado solicitado (acarretando em um Hit ou Miss). O simulador deve ser configurá
 aos aspectos de projeto de cache discutidos em sala: Mapeamento, Politica de Substituição e Política de
 Escrita.
 
-  1. Mapeamento:
+  * . Mapeamento:
   O mapeamento escolhido pode ser de 3 tipos: Direto, Totalmente Associativo e Parcialmente
   associativo. Dependendo do mapeamento escolhido e após receber o comando de leitura ou escrita o
   simulador deve informar o resultado da operação (hit ou miss) e a linha da cache que contém o bloco
   solicitado.
 
-  1. Política de Substituição:
+  * . Política de Substituição:
   O algoritmo de substituição de blocos podem ser de 4: Aleatório, FIFO, LFU e LRU. Dependendo da
   política de substituição escolhida e após receber o comando de leitura ou escrita o simulador deve
   adicionalmente informar se houve substituição e qual bloco foi retirado de que linha da cache.
