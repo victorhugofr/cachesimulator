@@ -1,8 +1,12 @@
 #include "processos.hpp"
+#include <fstream>
+#include <string>
+#include <iostream>
+#include <ctime>
 using namespace std;
-void mapeamentodireto(int *cabecalho, string palavra, int * v){ // read25
-	palavra2=stoi(palavra);
-	int bloco = palavra2 / cabecalho[0]; // 6
+void mapeamentodireto(int *cabecalho, int palavra, int * v){ // read25
+	//int palavra2=stoi(palavra);
+	int bloco = palavra / cabecalho[0]; // 6
 	int linha = bloco % cabecalho[1]; // 2
 	if(v[linha] == bloco) cout << "HIT: linha " << linha << endl; 
 	else {
@@ -27,15 +31,22 @@ int menorta(int* cabecalho, int* cont){
 	}
 	return menor;
 }
-int totalmenteassociativo(int *cabecalho, string palavra, int* v, int* cont, bool &cheio) {	
-	palavra2=stoi(palavra);
+int totalmenteassociativo(int *cabecalho, int palavra, int* v, int* cont, bool &cheio) {	
+	//int palavra2=stoi(palavra);
 	int subs = cabecalho[5];
-	int bloco = palavra2 / cabecalho[0];
+	int bloco = palavra / cabecalho[0];
 	//ALEATORIO
 	if(subs == 1) {	
+		bool procura = false;
 		int linha = rand() % cabecalho[1];
-		if(v[linha] == bloco) cout << "HIT: linha " << linha << endl;
-		else {
+		for(int i = 0; i < cabecalho[1]; i++) {
+			if(v[i] == bloco) {
+				cout << "HIT: linha " << i << endl;
+				procura = true;
+			}
+		}
+		//if(v[linha] == bloco) cout << "HIT: linha " << linha << endl;
+		if(!procura) {
 			v[linha] = bloco;
 			cout << "MISS -> alocado na linha " << linha << endl;
 		}
@@ -137,4 +148,5 @@ int totalmenteassociativo(int *cabecalho, string palavra, int* v, int* cont, boo
 			}
 		}
 	}
+	return 0;
 }

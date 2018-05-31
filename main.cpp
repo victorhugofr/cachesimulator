@@ -31,8 +31,9 @@ int main() {
     int auxc = 0;
     for(int i = 0; i < cont; i++){
         getline(arquivo, instrucoes[i]); //leitura do arquivo
-        if(i<=6){
+        if(i<6){
             cabecalho[auxi]=stoi(instrucoes[i]);
+            cout<<cabecalho[i]<<endl;
             auxi++;
         }else {
             comandos[auxc]=instrucoes[i];
@@ -54,33 +55,35 @@ int main() {
 	}
 	srand(time(NULL));
  	bool cheio = false;
- 	string palavraantes;
  	int palavra;
+ 	int teste1,teste2;
     if(mapeamento==1){
+    	cout<<"SELECIONADO: MAPEAMENTO DIRETO"<<endl;
     	for(int i = 0 ; i<auxc ; i++){
  			if(comandos[i][2]=='a' && comandos[i][3]=='d'){
  				if(comandos[i][6]){
- 					palavraantes=comandos[i][5] + comandos[i][6];
- 					//palavra=stoi(palavraantes);
- 					mapeamentodireto(cabecalho,palavraantes, v); 
+ 					teste1=(comandos[i][5]-48);
+ 					teste2=(comandos[i][6]-48);
+ 					palavra=(teste1*10)+(teste2);
+ 					mapeamentodireto(cabecalho,palavra, v); 
  				}else{
-					palavraantes=comandos[i][5];
-					palavra=stoi(palavraantes);
-					mapeamentodireto(cabecalho,palavraantes, v); 
+					palavra=comandos[i][5]-48;
+					mapeamentodireto(cabecalho,palavra, v); 
 				}
  			}//read 25
  		}
     }else if(mapeamento==2){
+    	cout<<"SELECIONADO: TOTALMENTE ASSOCIATIVO"<<endl;
     	for(int i = 0 ; i<auxc ; i++){
  			if(comandos[i][2]=='a' && comandos[i][3]=='d'){
  				if(comandos[i][6]){
- 					palavraantes=comandos[i][5] + comandos[i][6];
- 					//palavra=stoi(palavraantes);
- 					totalmenteassociativo(cabecalho,palavraantes,v,cont2,cheio); 
+ 					teste1=(comandos[i][5]-48);
+ 					teste2=(comandos[i][6]-48);
+ 					palavra=(teste1*10)+(teste2);
+ 					totalmenteassociativo(cabecalho,palavra,v,cont2,cheio); 
  				}else{
-					palavraantes=comandos[i][5];
-					palavra=stoi(palavraantes);
-					totalmenteassociativo(cabecalho,palavraantes,v,cont2,cheio);
+					palavra=comandos[i][5]-48;
+					totalmenteassociativo(cabecalho,palavra,v,cont2,cheio);
 				}
  			}//read 25
  		}
