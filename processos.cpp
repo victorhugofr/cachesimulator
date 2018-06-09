@@ -31,7 +31,7 @@ int menorta(int* cabecalho, int* cont){
 	}
 	return menor;
 }
-int totalmenteassociativo(int *cabecalho, int palavra, int* v, int* cont, bool &cheio) {	
+int totalmenteassociativo(int *cabecalho, int palavra, int* v, int* cont, bool &cheio,int &contquantos, int &posmaior, bool &existemaior) {	
 	//int palavra2=stoi(palavra);
 	int subs = cabecalho[5];
 	int bloco = palavra / cabecalho[0];
@@ -134,8 +134,7 @@ int totalmenteassociativo(int *cabecalho, int palavra, int* v, int* cont, bool &
 							return 0;
 						}
 					}
-				}
-				else if(aux == 1) {
+				}else if(aux == 1) {
 					for(int i = 0 ; i<cabecalho[1]; i++){
 						if(cont[i]==menor){
 							v[i]=bloco;
@@ -145,6 +144,70 @@ int totalmenteassociativo(int *cabecalho, int palavra, int* v, int* cont, bool &
 					}
 					return 0;
 				}
+			}
+		}
+	}
+	else if(subs == 4) {
+		bool procura = false;
+		for(int i = 0; i < cabecalho[1]; i++) {
+			if(v[i] == bloco) {
+				cout << "HIT: linha " << i << endl;
+				procura = true;
+				cont[i] = 1+contquantos;
+				for(int z = 0;z<cabecalho[1];z++){ // 0 4 3 2
+					if(cont[z]==cabecalho[1]){
+						existemaior=true;
+						posmaior=z;
+					}
+				}
+				if(existemaior && posmaior!=i){
+					for(int z = 0;z<cabecalho[1];z++){ // 0 0 4 2
+						cont[z]--;
+						if(cont[z]<=0) cont[z]=0;
+					}
+				}
+				if(cont[i]>=4){
+					cont[i]=4;
+					existemaior=true;
+				}
+				contquantos++;
+			}
+		}
+		if(!procura) {
+			cout << "MISS -> alocado na linha ";
+			for(int i = 0; i < cabecalho[1]; i++) {
+					if(v[i] == -1) { // ACHA ESTA LINHA
+						if(existemaior){
+							for(int z = 0;z<cabecalho[1];z++){ // 3 2 4 0
+								cont[z]--;
+								if(cont[z]<=0) cont[z]=0;
+							}
+						}
+						v[i] = bloco; // SUBSTITUI
+						cont[i]=1+contquantos; // UTILIZADO UMA VEZ
+						if(cont[i]>4){
+							cont[i]=4;
+						}
+						cout << i << endl; // QUAL LINHA FOI ALOCADA
+						contquantos++;
+						if(i == cabecalho[1]-1) cheio = true; //  4*4 2*4 3*4 4*4
+						return 0;
+					}
+			}
+			int menor = menorta(cabecalho, cont);
+			if(menor != 0 && cheio == true) {
+					for(int i = 0; i < cabecalho[1]; i++) {
+						if(cont[i] == menor) {
+							v[i] = bloco;
+								for(int z = 0;z<cabecalho[1];z++){
+									cont[z]--;
+								}
+								cont[i] = 4;
+							cout << i << endl;
+
+							return 0;
+						}
+					}
 			}
 		}
 	}

@@ -55,8 +55,9 @@ int main() {
 	}
 	srand(time(NULL));
  	bool cheio = false;
- 	int palavra;
+ 	int palavra, posmaior, contquantos=0;
  	int teste1,teste2;
+    bool existemaior = false;
     if(mapeamento==1){
     	cout<<"SELECIONADO: MAPEAMENTO DIRETO"<<endl;
     	for(int i = 0 ; i<auxc ; i++){
@@ -80,10 +81,10 @@ int main() {
  					teste1=(comandos[i][5]-48);
  					teste2=(comandos[i][6]-48);
  					palavra=(teste1*10)+(teste2);
- 					totalmenteassociativo(cabecalho,palavra,v,cont2,cheio); 
+ 					totalmenteassociativo(cabecalho,palavra,v,cont2,cheio,contquantos,posmaior,existemaior); 
  				}else{
 					palavra=comandos[i][5]-48;
-					totalmenteassociativo(cabecalho,palavra,v,cont2,cheio);
+					totalmenteassociativo(cabecalho,palavra,v,cont2,cheio,contquantos,posmaior,existemaior);
 				}
  			}//read 25
  		}
