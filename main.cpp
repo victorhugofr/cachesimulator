@@ -44,12 +44,13 @@ int main() {
     int linhascache = cabecalho[1];
     int numblocos = cabecalho[2];
     int mapeamento = cabecalho[3];
+    int tammemoria = cabecalho[0]*cabecalho[2];
+                    //eenndereço/cabecalho[0]
     int *cache = new int[linhascache];
-    int *cont2 = new int[linhascache];
+    int *contadoraux = new int[linhascache]();
     int *conteudo=new int[numblocos*tambloco]();
 	for(int i = 0; i < linhascache; i++) {
 		cache[i] = -1;
-		cont2[i]= 0;
 	}
 	srand(time(NULL));
  	bool cheio = false;
@@ -105,6 +106,10 @@ int main() {
                         }
                     }
                 }
+                cout <<"MEMORIA PRINCIPAL:"<<endl;
+                for(int i=0; i<tammemoria;i++){
+                    cout<< i/cabecalho[0]<<" - "<<i << " - " <<conteudo[i]<<endl;
+                }
             }
         }
     }else if(mapeamento==2){
@@ -115,10 +120,10 @@ int main() {
  					teste1=(comandos[i][5]-48);
  					teste2=(comandos[i][6]-48);
  					palavra=(teste1*10)+(teste2);
- 					totalmenteassociativo(cabecalho,palavra,cache,cont2,cheio,contquantos,posmaior,existemaior); 
+ 					totalmenteassociativo(cabecalho,palavra,cache,contadoraux,cheio,contquantos,posmaior,existemaior); 
  				}else{
 					palavra=comandos[i][5]-48;
-					totalmenteassociativo(cabecalho,palavra,cache,cont2,cheio,contquantos,posmaior,existemaior);
+					totalmenteassociativo(cabecalho,palavra,cache,contadoraux,cheio,contquantos,posmaior,existemaior);
 				}
  			}//read 25
              else if(comandos[i][2]=='i' && comandos[i][3]=='t'){
@@ -156,6 +161,10 @@ int main() {
                         }
                     }
                 }
+                cout <<"MEMORIA PRINCIPAL:"<<endl;
+                for(int i=0; i<tammemoria;i++){
+                    cout<< i/cabecalho[0]<<" - "<<i << " - " <<conteudo[i]<<endl;
+                }
             }
  		}
     }else if(mapeamento==3){
@@ -166,10 +175,10 @@ int main() {
                     teste1=(comandos[i][5]-48);
                     teste2=(comandos[i][6]-48);
                     palavra=(teste1*10)+(teste2);
-                    parcialmenteassociativo(cabecalho,palavra,cache,cont2,cheio,contquantos,posmaior,existemaior); 
+                    parcialmenteassociativo(cabecalho,palavra,cache,contadoraux,cheio,contquantos,posmaior,existemaior); 
                 }else{
                     palavra=comandos[i][5]-48;
-                    parcialmenteassociativo(cabecalho,palavra,cache,cont2,cheio,contquantos,posmaior,existemaior);
+                    parcialmenteassociativo(cabecalho,palavra,cache,contadoraux,cheio,contquantos,posmaior,existemaior);
                 }
             }//read 25
             else if(comandos[i][2]=='i' && comandos[i][3]=='t'){
@@ -207,12 +216,16 @@ int main() {
                         }
                     }
                 }
+                cout <<"MEMORIA PRINCIPAL:"<<endl;
+                for(int i=0; i<tammemoria;i++){
+                    cout<< i/cabecalho[0]<<" - "<<i << " - " <<conteudo[i]<<endl;
+                }
             }
         }
     }
     arquivo.clear();
     arquivo.seekg(arquivo.beg);
-    
+    delete[] cache;
     delete[] instrucoes;
     delete[] comandos;
     delete[] conteudo;
