@@ -31,6 +31,17 @@ int menorta(int* cabecalho, int* contadoraux){
 	}
 	return menor;
 }
+int menorpa(int *cabecalho, int *contadoraux, int inicioBusca){
+	int menor = contadoraux[inicioBusca];
+	for(int i = inicioBusca; i < (inicioBusca + (cabecalho[1] / cabecalho[4])); i++) {
+		if(contadoraux[i] == 0) return 0;
+	}
+
+	for(int i = inicioBusca + 1; i < (inicioBusca + (cabecalho[1] / cabecalho[4])); i++) {
+		if(contadoraux[i] < menor) menor = contadoraux[i];
+	}
+	return menor;
+}
 int totalmenteassociativo(int *cabecalho, int palavra, int* cache, int* contadoraux, bool &cheio,int &contquantos, int &posmaior, bool &existemaior) {	
 	//int palavra2=stoi(palavra);
 	int subs = cabecalho[5];
@@ -96,28 +107,35 @@ int totalmenteassociativo(int *cabecalho, int palavra, int* cache, int* contador
 	//LFU(MENOS FREQUENTEMENTE UTILIZADO)
 	else if(subs == 3) {
 		bool procura = false;
+		int post;
 		for(int i = 0; i < cabecalho[1]; i++) {
 			if(cache[i] == bloco) {
 				cout << "HIT: linha " << i << endl;
 				procura = true;
 				contadoraux[i] += 1;
+				post=i;
+			//	cout<<contadoraux[i]<<"---"<<endl;
 			}
 		}
+		////cout<<post<<endl;
+		//for(int l=0;l<cabecalho[1];l++){
+		//	cout<<contadoraux[l]<<"    ";
+		//}
 		if(!procura) {
 			cout << "MISS -> alocado na linha ";
 			int menor = menorta(cabecalho, contadoraux);
 			for(int i = 0; i < cabecalho[1]; i++) {
-				if(menor == 0) { // ALGUMA LINHA NAO FOI UTILIZADA AINDA
-					if(cache[i] == -1) { // ACHA ESTA LINHA
+				if(menor == 0 && cache[i]==-1) { // ALGUMA LINHA NAO FOI UTILIZADA AINDA
+					
 						cache[i] = bloco; // SUBSTITUI
-						contadoraux[i] += 1; // UTILIZADO UMA VEZ
+						contadoraux[i] = 1; // UTILIZADO UMA VEZ
 						cout << i << endl; // QUAL LINHA FOI ALOCADA
 						if(i == cabecalho[1]-1) cheio = true; // CASO FICOU CHEIO
 						return 0;
-					}
+					
 				}
 			}
-			menor = menorta(cabecalho, contadoraux);
+			//menor = menorta(cabecalho, contadoraux);
 			if(menor != 0 && cheio == true) {
 				int aux = 0;
 				for(int i = 0; i < cabecalho[1]; i++) {
@@ -129,7 +147,7 @@ int totalmenteassociativo(int *cabecalho, int palavra, int* cache, int* contador
 					for(int i = 0; i < cabecalho[1]; i++) {
 						if(contadoraux[i] == menor) {
 							cache[i] = bloco;
-							contadoraux[i] = 1;
+							contadoraux[i] += 1;
 							cout << i << endl;
 							return 0;
 						}
@@ -138,13 +156,14 @@ int totalmenteassociativo(int *cabecalho, int palavra, int* cache, int* contador
 					for(int i = 0 ; i<cabecalho[1]; i++){
 						if(contadoraux[i]==menor){
 							cache[i]=bloco;
-							contadoraux[i]=1;
+							contadoraux[i]+=1;
 							cout<< i <<endl;
 						}
 					}
 					return 0;
 				}
 			}
+
 		}
 	}
 	else if(subs == 4) {
@@ -213,54 +232,63 @@ int totalmenteassociativo(int *cabecalho, int palavra, int* cache, int* contador
 	}
 	return 0;
 }
-int parcialmenteassociativo(int *cabecalho, int palavra, int* cache, int* contadoraux, bool &cheio,int &contquantos, int &posmaior, bool &existemaior){
+int parcialmenteassociativo(int *cabecalho, int palavra, int* v, int* cont, bool &cheio,int &contquantos, int &posmaior, bool &existemaior) {
 	int subs = cabecalho[5];
 	int bloco = palavra / cabecalho[0];
-	int qtdvias = cabecalho[4];
-	int via = bloco % qtdvias;
-	int linhaspv = cabecalho[1] / cabecalho[4];
-	int auxx=via*linhaspv;
+	int qtVias = cabecalho[4];
+	int via = bloco % qtVias;
+	int linhasPorVia = cabecalho[1] / cabecalho[4];
+
 	//ALEATÓRIO
 	if(subs == 1) {
-		via = rand() % qtdvias;
-		int linha = rand() % linhaspv;
-		for(int i = 0; i < qtdvias; i++) {
+		via = rand() % qtVias;
+
+		int linha = rand() % linhasPorVia;
+
+		for(int i = 0; i < qtVias; i++) {
 			if(via == i) {
-				if(cache[auxx+linha] == bloco) cout << "HIT: via " << via << " - Linha: " << linha << endl;
+				if(v[linha + linhasPorVia*via] == bloco) cout << "HIT: via " << via << " - Linha: " << linha << endl;
 				else {
-					cache[auxx+linha] = bloco;
+					v[linha + linhasPorVia*via] = bloco;
 					cout << "HIT: via " << via << " - Linha: " << linha << endl;
 				}
 			}
 		}
 	}
-			//FIFO
+
+	//FIFO
 	else if(subs == 2) {
-		bool procura = false;
+		bool estaCompleta = false;
+
 		for(int i = 0; i < cabecalho[1]; i++) {
-			if(cache[i]==bloco){
-				cout << "HIT: Via: " << i / linhaspv << " - Linha: " << i % linhaspv << endl;
-				procura = true;
+			if(v[i] == bloco) {
+				cout << "HIT: Via: " << i / linhasPorVia << " - Linha: " << i % linhasPorVia << endl;
+				estaCompleta = true;
 			}
 		}
-		if(!procura) {
+
+		if(!estaCompleta) {
 			cout << "MISS -> alocado na via: " << via << " - Linha: ";
-			for(int i = auxx; i < auxx + linhaspv; i++) {
-				contadoraux[i] += 1;
-				if(cache[i] == -1) {
-					cache[i] = bloco;
-					cout << i % linhaspv << endl;
-					if(i == auxx + linhaspv-1) cheio = true;
+
+			for(int j = via*linhasPorVia; j < ((via*linhasPorVia) + linhasPorVia); j++) {
+				cont[j] += 1;
+
+				if(v[j] == -1) {
+					v[j] = bloco;
+					cout << j % linhasPorVia << endl;
+					if(j == ((via*linhasPorVia) + linhasPorVia)-1) cheio = true;
 					return 0;
 				}
 			}
+
 			if(cheio == true) {
-				int maior = maiorta(cabecalho, contadoraux);
-				for(int i = auxx; i < auxx + linhaspv; i++) {
-					if(contadoraux[i] == maior) {
-						cache[i] = bloco;
-						contadoraux[i] = 1;
-						cout << i % linhaspv << endl;
+				int maior = maiorta(cabecalho, cont);
+
+				for(int i = via*linhasPorVia; i < ((via*linhasPorVia) + linhasPorVia); i++) {
+					if(cont[i] == maior) {
+						v[i] = bloco;
+						cont[i] = 1;
+						cout << i % linhasPorVia << endl;
 						return 0;
 					}
 				}				
@@ -269,49 +297,57 @@ int parcialmenteassociativo(int *cabecalho, int palavra, int* cache, int* contad
 	}
 
 	//LFU
-	else if(subs==3){
-		bool procura = false;
+	else if(subs == 3) {
+		bool estaCompleta = false;
+
 		for(int i = 0; i < cabecalho[1]; i++) {
-			if(cache[i]==bloco){
-				cout << "HIT: Via: " << i / linhaspv << " - Linha: " << i % linhaspv << endl;
-				procura = true;
-				contadoraux[i] += 1;
+			if(v[i] == bloco) {
+				cout << "HIT: Via: " << i / linhasPorVia << " - Linha: " << i % linhasPorVia << endl;
+				estaCompleta = true;
+				cont[i] += 1;
 			}
 		}
-		if(!procura) {
+
+		if(!estaCompleta) {
 			cout << "MISS -> alocado na via: " << via << " - Linha: ";
-			for(int i = auxx; i < auxx + linhaspv; i++) {
-				if(cache[i] == -1) {
-					cache[i] = bloco;
-					contadoraux[i] += 1;
-					cout << i % linhaspv << endl;
-					if(i == auxx + linhaspv-1) cheio = true;
+
+			for(int j = via*linhasPorVia; j < ((via*linhasPorVia) + linhasPorVia); j++) {
+				if(v[j] == -1) {
+					v[j] = bloco;
+					cont[j] += 1;
+					cout << j % linhasPorVia << endl;
+					if(j == ((via*linhasPorVia) + linhasPorVia)-1) cheio = true;
 					return 0;
 				}
 			}
+
 			if(cheio == true) {
-				int menor = menorta(cabecalho, contadoraux);
+				int menor = menorpa(cabecalho, cont,(via*linhasPorVia));
 				int aux = 0;
 				int aux2;
-				for(int i = auxx; i < auxx+linhaspv; i++){
-					if(contadoraux[i] == menor) {
+
+				for(int i = via*linhasPorVia; i < ((via*linhasPorVia) + linhasPorVia); i++){
+					if(cont[i] == menor) {
 						aux += 1;
 						aux2 = i; 
 					}
 				}
+
 				if(aux > 1) {
-					for(int i = auxx; i < auxx + linhaspv; i++) {
-						if(contadoraux[i] == menor) {
-							cache[i] = bloco;
-							contadoraux[i] = 1;
-							cout << i % linhaspv << endl;
+					for(int i = via*linhasPorVia; i < ((via*linhasPorVia) + linhasPorVia); i++) {
+						if(cont[i] == menor) {
+							v[i] = bloco;
+							cont[i] += 1;
+							cout << i % linhasPorVia << endl;
 							return 0;
 						}
 					}
-				}else if(aux == 1){
-					cache[aux2] = bloco;
-					contadoraux[aux2] = 1;
-					cout << aux2 % linhaspv << endl;
+				}
+
+				else if(aux == 1) {
+					v[aux2] = bloco;
+					cont[aux2] += 1;
+					cout << aux2 % linhasPorVia << endl;
 					return 0;
 				}
 			}
@@ -319,62 +355,63 @@ int parcialmenteassociativo(int *cabecalho, int palavra, int* cache, int* contad
 	}
 	//LRU
 		else if(subs == 4) {
-		bool procura = false;
+		bool procura = true;
 		for(int i = 0; i < cabecalho[1]; i++) {
-			if(cache[i] == bloco) {
-				cout << "HIT: Via: " << i / linhaspv << " - Linha: " << i % linhaspv << endl;
-				procura = true;
-				contadoraux[i] = 1+contquantos;
-				for(int z = 0;z<cabecalho[1];z++){ // 0 4 3 2
-					if(contadoraux[z]==cabecalho[1]){
+			if(v[i] == bloco) {
+				cout << "HIT: Via: " << i / linhasPorVia << " - Linha: " << i % linhasPorVia << endl;
+				procura = false;
+				cont[i] = 1+contquantos;
+				for(int z = via*linhasPorVia;z<((via*linhasPorVia) + linhasPorVia);z++){ // 0 4 3 2
+					if(cont[z]==linhasPorVia){
 						existemaior=true;
 						posmaior=z;
 					}
 				}
 				if(existemaior && posmaior!=i){
-					for(int z = 0;z<cabecalho[1];z++){ // 0 0 4 2
-						contadoraux[z]--;
-						if(contadoraux[z]<=0) contadoraux[z]=0;
+					for(int z = via*linhasPorVia;z<((via*linhasPorVia) + linhasPorVia);z++){ // 0 0 4 2
+						cont[z]--;
+						if(cont[z]<=0) cont[z]=0;
 					}
 				}
-				if(contadoraux[i]>=4){
-					contadoraux[i]=4;
+				if(cont[i]>=linhasPorVia){
+					cont[i]=linhasPorVia;
 					existemaior=true;
 				}
 				contquantos++;
 			}
 		}
-		if(!procura) {
+		if(procura) {
 			cout << "MISS -> alocado na via: " << via << " - Linha: ";
-			for(int i = 0; i < cabecalho[1]	; i++) { // auxx = 2 * 2
-					if(cache[i] == -1) { // ACHA ESTA LINHA
+			for(int i = via*linhasPorVia; i < ((via*linhasPorVia) + linhasPorVia)	; i++) { // via*linhasPorVia = 2 * 2
+					if(v[i] == -1) { // ACHA ESTA LINHA
 						if(existemaior){
-							for(int z = 0;z<cabecalho[1];z++){ // 3 2 4 0
-								contadoraux[z]--;
-								if(contadoraux[z]<=0) contadoraux[z]=0;
+							for(int z = via*linhasPorVia;z<((via*linhasPorVia) + linhasPorVia);z++){ // 3 2 4 0
+								cont[z]--;
+								if(cont[z]<=0) cont[z]=0;
 							}
 						}
-						cache[i] = bloco; // SUBSTITUI
-						contadoraux[i]=1+contquantos; // UTILIZADO UMA VEZ
-						if(contadoraux[i]>cabecalho[i]){
-							contadoraux[i]=cabecalho[i];
+						v[i] = bloco; // SUBSTITUI
+						cont[i]=1+contquantos; // UTILIZADO UMA VEZ
+						if(cont[i]>linhasPorVia){
+							cont[i]=linhasPorVia;
 						}
-						cout << i%linhaspv << endl; // QUAL LINHA FOI ALOCADA
+						cout << i%linhasPorVia << endl; // QUAL LINHA FOI ALOCADA
 						contquantos++;
-						if(i == cabecalho[1]-1) procura = true; //  4*4 2*4 3*4 4*4
+						if(i == linhasPorVia-1) cheio = true; //  4*4 2*4 3*4 4*4
 						return 0;
 					}
 			}
-			int menor =menorta(cabecalho,contadoraux);
-			if(menor != 0 && procura == true) {
-					for(int i = 0; i < cabecalho[1]; i++) {
-						if(contadoraux[i] == menor) {
-							cache[i] = bloco;
-								for(int z = 0;z<cabecalho[1];z++){
-									contadoraux[z]--;
+			int menor =menorpa(cabecalho,cont,(via*linhasPorVia));
+			if(menor != 0 && cheio == true) {
+					for(int i =  via*linhasPorVia; i < ((via*linhasPorVia) + linhasPorVia); i++) {
+						if(cont[i] == menor) {
+							v[i] = bloco;
+								for(int z = via*linhasPorVia;z<((via*linhasPorVia) + linhasPorVia);z++){
+									cont[z]--;
+									if(cont[z]<=0) cont[z]=1;
 								}
-								contadoraux[i] = cabecalho[1];
-							cout << i%linhaspv << endl;
+							cont[i] = linhasPorVia;
+							cout << i%linhasPorVia << endl;
 
 							return 0;
 						}
