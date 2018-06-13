@@ -23,9 +23,9 @@ int maiorta(int* cabecalho, int* contadoraux) {
 }
 int menorta(int* cabecalho, int* contadoraux){
 	int menor = contadoraux[0];
-	for(int j = 0; j < cabecalho[1]; j++) {
-		if(contadoraux[j] == 0) return 0;
-	}
+//	for(int j = 0; j < cabecalho[1]; j++) {
+	//	if(contadoraux[j] == 0) return 0;
+	//}
 	for(int i = 1; i < cabecalho[1]; i++) {
 		if(contadoraux[i] < menor) menor = contadoraux[i];
 	}
@@ -33,73 +33,70 @@ int menorta(int* cabecalho, int* contadoraux){
 }
 int menorpa(int *cabecalho, int *contadoraux, int iniciovia){
 	int menor = contadoraux[iniciovia];
-	for(int i = iniciovia; i < (iniciovia + (cabecalho[1] / cabecalho[4])); i++) {
-		if(contadoraux[i] == 0) return 0;
-	}
+	//for(int i = iniciovia; i < (iniciovia + (cabecalho[1] / cabecalho[4])); i++) {
+	//	if(contadoraux[i] == 0) return 0;
+	//}
 
 	for(int i = iniciovia + 1; i < (iniciovia + (cabecalho[1] / cabecalho[4])); i++) {
 		if(contadoraux[i] < menor) menor = contadoraux[i];
 	}
 	return menor;
 }
-int totalmenteassociativo(int *cabecalho, int palavra, int* cache, int* contadoraux, bool &cheio,int &contquantos, int &posmaior, bool &existemaior) {	
-	int subs = cabecalho[5];
+void totalmentealeatorio (int*cabecalho, int palavra,int*cache){
+int bloco = palavra / cabecalho[0];
+int linha = rand() % cabecalho[1];
+	for(int i = 0; i < cabecalho[1]; i++) {
+		if(cache[i] == bloco) {
+			cout << "HIT: linha " << i << endl;
+			return;
+		}
+	}
+	cache[linha] = bloco;
+	cout << "MISS -> alocado na linha " << linha << endl;
+}
+void totalmentefifo(int*cabecalho,int palavra, int *cache, int *contadoraux, bool &cheio){
 	int bloco = palavra / cabecalho[0];
-	//ALEATORIO
-	if(subs == 1) {	
-		int linha = rand() % cabecalho[1];
-		for(int i = 0; i < cabecalho[1]; i++) {
-			if(cache[i] == bloco) {
-				cout << "HIT: linha " << i << endl;
-				return 0;
-			}
+	for(int i = 0; i < cabecalho[1]; i++) {
+		if(cache[i] == bloco) {
+			cout << "HIT: linha " << i << endl;
+			return ;
 		}
-		cache[linha] = bloco;
-		cout << "MISS -> alocado na linha " << linha << endl;
 	}
-	//FIFO(FILA)
-	else if(subs == 2) {
-		for(int i = 0; i < cabecalho[1]; i++) {
-			if(cache[i] == bloco) {
-				cout << "HIT: linha " << i << endl;
-				return 0;
-			}
+	cout << "MISS -> alocado na linha ";
+	int maior = maiorta(cabecalho, contadoraux);
+	for(int j = 0; j < cabecalho[1]; j++) {
+		contadoraux[j] += 1;
+		if(maior == 0) {
+			cache[0] = bloco;
+			cout << "0" << endl; // CASO NAO HAJA MAIOR(SEJA O PRIMEIRO A ENTRAR NA CACHE)ALOCA NA LINHA 0 DA CACHE
+			return;
 		}
-			cout << "MISS -> alocado na linha ";
-			int maior = maiorta(cabecalho, contadoraux);
-			for(int j = 0; j < cabecalho[1]; j++) {
-				contadoraux[j] += 1;
-				if(maior == 0) {
-					cache[0] = bloco;
-					cout << "0" << endl; // CASO NAO HAJA MAIOR(SEJA O PRIMEIRO A ENTRAR NA CACHE)ALOCA NA LINHA 0 DA CACHE
-					return 0;
-				}
-					if(cache[j] == -1) {
-						cache[j] = bloco;
-						cout << j << endl;
-						if(j == cabecalho[1]-1) cheio = true; // VERIFICACAO SE CACHE ESTA CHEIO
-						return 0;
-					}
-			}
-			if(maior != 0 && cheio == true) {
-				maior = maiorta(cabecalho, contadoraux);
-				for(int i = 0; i < cabecalho[1]; i++) {
-					if(contadoraux[i] == maior) { // SE A CHACE JA ESTAVA CHEIA, ALOCA NO MAIOR E DEPOIS GERA O QUE ALOCOU = 1;
-						cache[i] = bloco;
-						contadoraux[i] = 1;
-						cout << i << endl;
-						return 0;
-					}
-				}				
+			if(cache[j] == -1) {
+				cache[j] = bloco;
+				cout << j << endl;
+				if(j == cabecalho[1]-1) cheio = true; // VERIFICACAO SE CACHE ESTA CHEIO
+				return;
 			}
 	}
-	//LFU(MENOS FREQUENTEMENTE UTILIZADO)
-	else if(subs == 3) {
+	if(maior != 0 && cheio == true) {
+		maior = maiorta(cabecalho, contadoraux);
 		for(int i = 0; i < cabecalho[1]; i++) {
+			if(contadoraux[i] == maior) { // SE A CHACE JA ESTAVA CHEIA, ALOCA NO MAIOR E DEPOIS GERA O QUE ALOCOU = 1;
+				cache[i] = bloco;
+				contadoraux[i] = 1;
+				cout << i << endl;
+				return;
+			}
+		}				
+	}
+}
+void totalmentelfu(int*cabecalho, int palavra, int *cache, int* contadoraux, bool &cheio){
+	int bloco = palavra / cabecalho[0];
+	for(int i = 0; i < cabecalho[1]; i++) {
 			if(cache[i] == bloco) {
 				cout << "HIT: linha " << i << endl;
 				contadoraux[i] += 1;
-				return 0;
+				return;
 			}
 		}
 			cout << "MISS -> alocado na linha ";
@@ -110,7 +107,7 @@ int totalmenteassociativo(int *cabecalho, int palavra, int* cache, int* contador
 						contadoraux[i] = 1; // UTILIZADO UMA VEZ
 						cout << i << endl; // QUAL LINHA FOI ALOCADA
 						if(i == cabecalho[1]-1) cheio = true; // CASO FICOU CHEIO
-						return 0;			
+						return;			
 				}
 			}
 			if(menor != 0 && cheio == true) {
@@ -126,7 +123,7 @@ int totalmenteassociativo(int *cabecalho, int palavra, int* cache, int* contador
 							cache[i] = bloco;
 							contadoraux[i] += 1;
 							cout << i << endl;
-							return 0;
+							return;
 						}
 					}
 				}else if(aux == 1) {
@@ -137,13 +134,13 @@ int totalmenteassociativo(int *cabecalho, int palavra, int* cache, int* contador
 							cout<< i <<endl;
 						}
 					}
-					return 0;
+					return;
 				}
 			}
-	}
-	//LRU
-	else if(subs == 4) {
-		for(int i = 0; i < cabecalho[1]; i++) {
+}
+void totalmentelru(int *cabecalho, int palavra, int* cache, int* contadoraux, bool &cheio,int &contquantos, int &posmaior, bool &existemaior){
+	int bloco = palavra / cabecalho[0];
+	for(int i = 0; i < cabecalho[1]; i++) {
 			if(cache[i] == bloco) {
 				cout << "HIT: linha " << i << endl;
 				contadoraux[i] = 1+contquantos;
@@ -164,7 +161,7 @@ int totalmenteassociativo(int *cabecalho, int palavra, int* cache, int* contador
 					existemaior=true;
 				}
 				contquantos++;
-				return 0;
+				return;
 			}
 		}
 		cout << "MISS -> alocado na linha ";
@@ -184,7 +181,7 @@ int totalmenteassociativo(int *cabecalho, int palavra, int* cache, int* contador
 				cout << i << endl; // QUAL LINHA FOI ALOCADA
 				contquantos++;
 				if(i == cabecalho[1]-1) cheio = true; //  4*4 2*4 3*4 4*4
-				return 0;
+				return;
 			}
 		}
 		int menor = menorta(cabecalho, contadoraux);
@@ -200,12 +197,29 @@ int totalmenteassociativo(int *cabecalho, int palavra, int* cache, int* contador
 							}
 							contadoraux[i] = cabecalho[1];
 						cout << i << endl;
-						return 0;
+						return;
 					}
 				}
 		}
+}
+void totalmenteassociativo(int *cabecalho, int palavra, int* cache, int* contadoraux, bool &cheio,int &contquantos, int &posmaior, bool &existemaior) {	
+	int subs = cabecalho[5];
+	//ALEATORIO
+	if(subs == 1) {	
+		totalmentealeatorio(cabecalho,palavra,cache);
 	}
-	return 0;
+	//FIFO(FILA)
+	else if(subs == 2) {
+		totalmentefifo(cabecalho,palavra,cache,contadoraux,cheio);
+	}
+	//LFU(MENOS FREQUENTEMENTE UTILIZADO)
+	else if(subs == 3) {
+		totalmentelfu(cabecalho,palavra,cache,contadoraux,cheio);
+	}
+	//LRU
+	else if(subs == 4) {
+		totalmentelru(cabecalho,palavra,cache,contadoraux,cheio,contquantos,posmaior,existemaior);
+	}
 }
 void parcialmentealeatorio(int *cabecalho, int*v, int palavra){
 	int qtddevias = cabecalho[4];

@@ -83,6 +83,7 @@ int main() {
                     }else{
                         conteudo[palavra]=teste3;
                     }
+                    mapeamentodireto(cabecalho,palavra, cache); 
                 }else{
                     teste1=(comandos[i][6]-48);
                     teste3=comandos[i][8]-48;
@@ -93,6 +94,7 @@ int main() {
                     }else{
                         conteudo[palavra]=teste3;
                     }
+                    mapeamentodireto(cabecalho,palavra, cache); 
                 }
             }
             else if(comandos[i][2]=='o' && comandos[i][3]=='w'){
@@ -138,6 +140,7 @@ int main() {
                     }else{
                         conteudo[palavra]=teste3;
                     }
+                    totalmenteassociativo(cabecalho,palavra,cache,contadoraux,cheio,contquantos,posmaior,existemaior); 
                 }else{
                     teste1=(comandos[i][6]-48);
                     teste3=comandos[i][8]-48;
@@ -148,6 +151,7 @@ int main() {
                     }else{
                         conteudo[palavra]=teste3;
                     }
+                    totalmenteassociativo(cabecalho,palavra,cache,contadoraux,cheio,contquantos,posmaior,existemaior); 
                 }
             }
             else if(comandos[i][2]=='o' && comandos[i][3]=='w'){
@@ -193,6 +197,7 @@ int main() {
                     }else{
                         conteudo[palavra]=teste3;
                     }
+                    parcialmenteassociativo(cabecalho,palavra,cache,contadoraux,cheio,contquantos,posmaior,existemaior);
                 }else{
                     teste1=(comandos[i][6]-48);
                     teste3=comandos[i][8]-48;
@@ -203,6 +208,7 @@ int main() {
                     }else{
                         conteudo[palavra]=teste3;
                     }
+                    parcialmenteassociativo(cabecalho,palavra,cache,contadoraux,cheio,contquantos,posmaior,existemaior);
                 }
             }
             else if(comandos[i][2]=='o' && comandos[i][3]=='w'){
